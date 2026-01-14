@@ -1,0 +1,27 @@
+# Compiled class files
+*.class
+target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# Environment variables (sensitive data)
+.env
+
+# H2 database files
+*.db
+*.trace.db
+
+# Spring Boot
+HELP.md
+
+# Generated sources
+/target/generated-sources/
