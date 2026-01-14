@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{emails/base :: layout(~{::content}, 'Your account has been created successfully')}">
+<body>
+    <th:block th:fragment="content">
+        <p>Hello <span class="highlight" th:text="${firstName ?: 'Member'}">Member</span>,</p>
+        
+        <p>We are delighted to welcome you to <strong>EcclesiaFlow</strong>, your church management platform.</p>
+        
+        <p>Your account has been created successfully. You can now :</p>
+
+        <ul>
+            <li>Complete your profile</li>
+            <li>Search churches and view their locations</li>
+            <li>Request to join a church as a member</li>
+        </ul>
+        
+        <div style="text-align: center;">
+            <a th:href="${confirmationLink ?: '#'}" class="btn">
+                Activate My Account
+            </a>
+        </div>
+        
+        <p>If you have any questions, our support team is here to help.</p>
+        
+        <p class="greeting">Best regards,<br>
+        The EcclesiaFlow Team</p>
+    </th:block>
+</body>
+</html>

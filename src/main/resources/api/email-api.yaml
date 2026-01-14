@@ -1,0 +1,460 @@
+openapi: 3.1.1
+info:
+  title: EcclesiaFlow Email API
+  description: |
+    Enterprise-grade email service for EcclesiaFlow platform.
+    
+    **Features:**
+    - Transactional email sending
+    - Template management with i18n
+    - Email tracking (opens, clicks, bounces)
+    - Multi-provider support (Gmail, SendGrid, AWS SES)
+    - Queue-based async processing
+    
+    **Architecture:**
+    - Contract-First design
+    - Clean Architecture (4 layers)
+    - Ports & Adapters (Hexagonal)
+    - DTO Projections for performance
+  version: 1.0.0
+  contact:
+    name: EcclesiaFlow Team
+    email: support@ecclesiaflow.com
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:8082
+    description: Development server
+  - url: https://email.ecclesiaflow.com
+    description: Production server
+
+security:
+  - BearerAuth: []
+
+paths:
+  /ecclesiaflow/emails:
+    post:
+      tags:
+        - Email
+      summary: Send communication
+      description: |
+        Queue an email for sending with template support.
+        
+        **Flow:**
+        1. Request received with template ID and variables
+        2. Email queued in RabbitMQ
+        3. Immediate 202 response
+        4. Background worker processes queue
+        5. Email sent via configured provider
+      operationId: Email.Send
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendEmailRequest'
+            examples:
+              confirmation_email:
+                summary: Member confirmation communication
+                value:
+                  to:
+                    - membre@eglise.com
+                  subject: "Confirmez votre inscription"
+                  templateId: "550e8400-e29b-41d4-a716-446655440000"
+                  variables:
+                    firstName: "Jean"
+                    confirmationLink: "https://app.ecclesiaflow.com/confirm?token=abc123"
+                  priority: HIGH
+      responses:
+        '202':
+          description: Email queued for sending
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendEmailResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /ecclesiaflow/emails/{emailId}/status:
+    get:
+      tags:
+        - Email
+      summary: Get communication delivery status
+      description: |
+        Retrieve the current delivery status and tracking data for a sent email.
+        
+        **Tracking includes:**
+        - Delivery status (queued, sent, delivered, failed)
+        - Open tracking (if enabled)
+        - Click tracking (if enabled)
+        - Bounce information (if applicable)
+      operationId: Email.GetStatus
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: emailId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+      responses:
+        '200':
+          description: Email status retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailStatusResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /ecclesiaflow/templates:
+    post:
+      tags:
+        - Template
+      summary: Create communication template
+      description: |
+        Create a new email template with Thymeleaf syntax and i18n support.
+      operationId: Template.Create
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTemplateRequest'
+      responses:
+        '201':
+          description: Template created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+    get:
+      tags:
+        - Template
+      summary: List communication templates
+      description: Get all communication templates with pagination
+      operationId: Template.List
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: category
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Templates retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplatePageResponse'
+
+  /ecclesiaflow/templates/{templateId}:
+    get:
+      tags:
+        - Template
+      summary: Get template by ID
+      operationId: Template.GetById
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: templateId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Template retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token from auth module
+
+  responses:
+    BadRequestError:
+      description: Invalid request data
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorResponse'
+    
+    UnauthorizedError:
+      description: Missing or invalid authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorResponse'
+    
+    NotFoundError:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorResponse'
+    
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiErrorResponse'
+
+  schemas:
+    SendEmailRequest:
+      type: object
+      required:
+        - to
+        - subject
+        - templateId
+      properties:
+        to:
+          type: array
+          items:
+            type: string
+            format: communication
+          minItems: 1
+          maxItems: 100
+          description: Recipient communication addresses
+        from:
+          type: string
+          format: communication
+          description: Sender communication (optional, uses default if not provided)
+        subject:
+          type: string
+          minLength: 1
+          maxLength: 500
+          description: Email subject line
+        templateId:
+          type: string
+          format: uuid
+          description: Template UUID to use
+        variables:
+          type: object
+          additionalProperties: true
+          description: Template variables (key-value pairs)
+        priority:
+          type: string
+          enum: [HIGH, NORMAL, LOW]
+          default: NORMAL
+          description: Email priority for queue processing
+    
+    SendEmailResponse:
+      type: object
+      required:
+        - emailId
+        - status
+        - queuedAt
+      properties:
+        emailId:
+          type: string
+          format: uuid
+          description: Unique communication identifier
+        status:
+          type: string
+          enum: [QUEUED, SENT, DELIVERED, FAILED, BOUNCED]
+          description: Current communication status
+        queuedAt:
+          type: string
+          format: date-time
+          description: Timestamp when communication was queued
+        message:
+          type: string
+          description: Human-readable status message
+    
+    EmailStatusResponse:
+      type: object
+      required:
+        - emailId
+        - status
+      properties:
+        emailId:
+          type: string
+          format: uuid
+        to:
+          type: array
+          items:
+            type: string
+            format: communication
+        subject:
+          type: string
+        status:
+          type: string
+          enum: [QUEUED, SENT, DELIVERED, FAILED, BOUNCED]
+        provider:
+          type: string
+          description: Email provider used (gmail, sendgrid, aws-ses)
+        queuedAt:
+          type: string
+          format: date-time
+        sentAt:
+          type: string
+          format: date-time
+        deliveredAt:
+          type: string
+          format: date-time
+        failedAt:
+          type: string
+          format: date-time
+        openedAt:
+          type: string
+          format: date-time
+        clicks:
+          type: integer
+          description: Number of link clicks
+        errorMessage:
+          type: string
+          description: Error message if failed
+    
+    CreateTemplateRequest:
+      type: object
+      required:
+        - name
+        - subject
+        - htmlContent
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Unique template name
+        subject:
+          type: string
+          minLength: 1
+          maxLength: 500
+          description: Email subject template
+        htmlContent:
+          type: string
+          description: HTML content with Thymeleaf syntax
+        textContent:
+          type: string
+          description: Plain text fallback
+        category:
+          type: string
+          maxLength: 100
+          description: Template category
+        locale:
+          type: string
+          pattern: '^[a-z]{2}$'
+          default: en
+          description: Language code (en, fr)
+        variables:
+          type: array
+          items:
+            type: string
+          description: List of required variable names
+    
+    TemplateResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        subject:
+          type: string
+        htmlContent:
+          type: string
+        textContent:
+          type: string
+        category:
+          type: string
+        locale:
+          type: string
+        variables:
+          type: array
+          items:
+            type: string
+        isActive:
+          type: boolean
+        version:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    
+    TemplatePageResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/TemplateResponse'
+        page:
+          type: integer
+        size:
+          type: integer
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+        first:
+          type: boolean
+        last:
+          type: boolean
+    
+    ApiErrorResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+
+tags:
+  - name: Email
+    description: Email sending and tracking operations
+  - name: Template
+    description: Email template management

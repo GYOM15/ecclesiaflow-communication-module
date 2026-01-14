@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{emails/base :: layout(~{::content}, 'One last step to activate your account')}">
+<body>
+    <th:block th:fragment="content">
+        <p>Hello <span th:text="${firstName ?: 'Member'}">Member</span>,</p>
+        
+        <p>Please confirm your email address to complete the creation of your EcclesiaFlow account.</p>
+        
+        <div style="text-align: center;">
+            <a th:href="${confirmationLink ?: '#'}" class="btn">
+                Confirm My Email
+            </a>
+        </div>
+        
+        <div class="info-box">
+            <p><strong>Information</strong></p>
+            <p>This link is valid for <strong>24 hours</strong>. After this period, you will need to request a new confirmation link.</p>
+        </div>
+        
+        <p class="greeting">Best regards,<br>
+        The EcclesiaFlow Team</p>
+    </th:block>
+</body>
+</html>
