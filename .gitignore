@@ -13,8 +13,15 @@ target/
 # Logs
 *.log
 
-# Environment variables (sensitive data)
+# Variables d'environnement (contiennent des secrets)
 .env
+.env.local
+.env.production
+.env.staging
+
+# Fichiers de configuration avec secrets
+application-*.properties
+application.properties
 
 # H2 database files
 *.db
