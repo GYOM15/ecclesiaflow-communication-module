@@ -1,4 +1,4 @@
-# EcclesiaFlow Email Module
+# EcclesiaFlow Communication Module
 
 [![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://openjdk.java.net/projects/jdk/21/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.5-brightgreen.svg)](https://spring.io/projects/spring-boot)
@@ -31,7 +31,7 @@ Microservice dedicated to email sending and tracking: transactional emails, temp
 
 ## Overview
 
-The **EcclesiaFlow Email Module** is a specialized microservice for transactional email management. It is part of the EcclesiaFlow ecosystem, a multi-tenant SaaS platform where each church operates as an independent tenant.
+The **EcclesiaFlow Communication Module** is a specialized microservice for transactional email management. It is part of the EcclesiaFlow ecosystem, a multi-tenant SaaS platform where each church operates as an independent tenant.
 
 ### **Module Responsibilities**
 
@@ -45,7 +45,7 @@ The **EcclesiaFlow Email Module** is a specialized microservice for transactiona
 ```mermaid
 sequenceDiagram
     participant Members as Members Module
-    participant Email as Email Module<br/>(REST: 8082, gRPC: 9092)
+    participant Email as Communication Module<br/>(REST: 8082, gRPC: 9092)
     participant Provider as Email Provider<br/>(Gmail/SendGrid)
 
     Members->>Email: SendEmail (gRPC)
@@ -78,23 +78,26 @@ sequenceDiagram
 
 ```
 ecclesiaflow-email-module/
-├── src/
-│   ├── main/
-│   │   ├── java/com/ecclesiaflow/email/
-│   │   │   ├── application/          # Config, Jobs, Logging, Messaging
-│   │   │   ├── business/             # Domain, Services, Exceptions
-│   │   │   ├── io/                   # Persistence, gRPC, Providers
-│   │   │   ├── web/                  # Controllers, DTOs, Mappers
-│   │   │   └── EmailModuleApplication.java
-│   │   ├── proto/
-│   │   │   └── email_service.proto
-│   │   └── resources/
-│   │       ├── api/email-api.yaml
-│   │       ├── templates/emails/
-│   │       └── application.properties
-│   └── test/
-│       └── java/com/ecclesiaflow/email/
-└── pom.xml
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── com
+│   │   │       └── ecclesiaflow
+│   │   ├── proto
+│   │   │   └── email_service.proto
+│   │   └── resources
+│   │       ├── api
+│   │       │   └── email-api.yaml
+│   │       ├── application.properties
+│   │       ├── application.properties.example
+│   │       ├── logback-spring.xml
+│   │       └── templates
+│   │           └── emails
+│   └── test
+│       ├── java
+│       │   └── com
+│       │       └── ecclesiaflow
+│       └── resources
 ```
 
 ---
@@ -128,7 +131,7 @@ ecclesiaflow-email-module/
 
 ## EcclesiaFlow Ecosystem
 
-* **Email Module** (This module)
+* **Communication Module** (This module)
   - **REST API**: Port 8082
   - **gRPC Server**: Port 9092
   - **Role**: Email sending and tracking
@@ -152,7 +155,7 @@ ecclesiaflow-email-module/
                │ REST (8080)      │ REST (8081)  │ REST (8082)
                ▼                  ▼              ▼
      ┌─────────────────┐    ┌─────────────┐    ┌─────────────┐
-     │  Members Module │    │ Auth Module │    │Email Module │
+     │  Members Module │    │ Auth Module │    │Comm Module  │
      │   gRPC: 9091    │    │ gRPC: 9090  │    │ gRPC: 9092  │
      └────────┬────────┘    └──────┬──────┘    └──────▲──────┘
               │                    │                  │
