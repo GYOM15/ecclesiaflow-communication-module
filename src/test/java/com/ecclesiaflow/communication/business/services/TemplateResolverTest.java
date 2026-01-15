@@ -35,15 +35,15 @@ class TemplateResolverTest {
     @Test
     void getDefaultSubject_shouldReturnExpectedSubjects() {
         assertThat(resolver.getDefaultSubject(EmailTemplateType.EMAIL_TEMPLATE_WELCOME))
-                .contains("Bienvenue");
+                .contains("Welcome");
         assertThat(resolver.getDefaultSubject(EmailTemplateType.EMAIL_TEMPLATE_PASSWORD_RESET))
-                .contains("Réinitialisation");
+                .contains("Reset");
         assertThat(resolver.getDefaultSubject(EmailTemplateType.EMAIL_TEMPLATE_PASSWORD_CHANGED))
-                .contains("modifié");
+                .contains("Changed");
         assertThat(resolver.getDefaultSubject(EmailTemplateType.EMAIL_TEMPLATE_EMAIL_CONFIRMATION))
-                .contains("Confirmez");
+                .contains("Confirm");
         assertThat(resolver.getDefaultSubject(EmailTemplateType.EMAIL_TEMPLATE_PROFILE_UPDATED))
-                .contains("profil");
+                .contains("Profile");
     }
 
     @Test

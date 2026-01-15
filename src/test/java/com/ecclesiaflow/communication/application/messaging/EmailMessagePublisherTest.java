@@ -2,6 +2,8 @@ package com.ecclesiaflow.communication.application.messaging;
 
 import com.ecclesiaflow.communication.business.domain.email.Email;
 import com.ecclesiaflow.communication.business.domain.email.EmailPriority;
+import com.ecclesiaflow.grpc.email.EmailQueueMessage;
+import com.ecclesiaflow.grpc.email.Priority;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -51,18 +53,18 @@ class EmailMessagePublisherTest {
         Email email = sampleEmail(EmailPriority.NORMAL);
 
         ArgumentCaptor<String> routingKey = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<EmailMessage> messageCaptor = ArgumentCaptor.forClass(EmailMessage.class);
+        ArgumentCaptor<EmailQueueMessage> messageCaptor = ArgumentCaptor.forClass(EmailQueueMessage.class);
 
         publisher.publishEmailForSending(email);
 
         verify(rabbitTemplate).convertAndSend(eq("ex"), routingKey.capture(), messageCaptor.capture());
         assertThat(routingKey.getValue()).isEqualTo("communication.send.normal");
-        EmailMessage msg = messageCaptor.getValue();
-        assertThat(msg.getEmailId()).isEqualTo(email.getId());
+        EmailQueueMessage msg = messageCaptor.getValue();
+        assertThat(msg.getEmailId()).isEqualTo(email.getId().toString());
         assertThat(msg.getFrom()).isEqualTo(email.getFromAddress());
-        assertThat(msg.getTo()).containsExactlyElementsOf(email.getToAddresses());
+        assertThat(msg.getToList()).containsExactlyElementsOf(email.getToAddresses());
         assertThat(msg.getTemplateName()).isEqualTo(email.getTemplateName());
-        assertThat(msg.getPriority()).isEqualTo(email.getPriority().name());
+        assertThat(msg.getPriority()).isEqualTo(Priority.PRIORITY_NORMAL);
         assertThat(msg.getRetryCount()).isEqualTo(email.getRetryCount());
     }
 
@@ -75,7 +77,7 @@ class EmailMessagePublisherTest {
 
         publisher.publishEmailForRetry(email);
 
-        verify(rabbitTemplate).convertAndSend(eq("ex"), routingKey.capture(), org.mockito.Mockito.any(EmailMessage.class));
+        verify(rabbitTemplate).convertAndSend(eq("ex"), routingKey.capture(), org.mockito.Mockito.any(EmailQueueMessage.class));
         assertThat(routingKey.getValue()).isEqualTo("communication.retry.high");
     }
 }

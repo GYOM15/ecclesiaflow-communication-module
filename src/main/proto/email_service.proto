@@ -3,7 +3,7 @@ syntax = "proto3";
 package ecclesiaflow.email;
 
 option java_multiple_files = true;
-option java_package = "com.ecclesiaflow.grpc.communication";
+option java_package = "com.ecclesiaflow.grpc.email";
 option java_outer_classname = "EmailServiceProto";
 
 // Email Service - High-performance inter-service communication
@@ -96,4 +96,20 @@ message SendBulkEmailsResponse {
   int32 total = 2;
   int32 queued = 3;
   int32 failed = 4;
+}
+
+// ============================================================================
+// RabbitMQ Queue Messages - Internal messaging between services
+// ============================================================================
+
+// Message for RabbitMQ email queue processing
+message EmailQueueMessage {
+  string email_id = 1;                       // Unique email identifier (UUID)
+  optional string from = 2;                  // Sender email address
+  repeated string to = 3;                    // Recipient email addresses
+  string subject = 4;                        // Email subject
+  string template_name = 5;                  // Template name (e.g., "emails/password-reset")
+  map<string, string> variables = 6;         // Template variables
+  Priority priority = 7;                     // Email priority
+  int32 retry_count = 8;                     // Number of send attempts
 }

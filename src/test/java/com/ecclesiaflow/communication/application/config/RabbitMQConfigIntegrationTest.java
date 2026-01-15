@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 
 import java.lang.reflect.Field;
@@ -115,21 +114,21 @@ class RabbitMQConfigIntegrationTest {
     }
 
     @Test
-    void jsonMessageConverter_shouldBeJackson() {
-        MessageConverter converter = config.jsonMessageConverter();
+    void protobufMessageConverter_shouldBeProtobufConverter() {
+        MessageConverter converter = config.protobufMessageConverter();
 
         assertThat(converter).isNotNull();
-        assertThat(converter).isInstanceOf(Jackson2JsonMessageConverter.class);
+        assertThat(converter).isInstanceOf(ProtobufMessageConverter.class);
     }
 
     @Test
-    void rabbitTemplate_shouldUseJsonConverter() {
+    void rabbitTemplate_shouldUseProtobufConverter() {
         ConnectionFactory connectionFactory = mock(ConnectionFactory.class);
-        MessageConverter converter = config.jsonMessageConverter();
+        MessageConverter converter = config.protobufMessageConverter();
 
         RabbitTemplate template = config.rabbitTemplate(connectionFactory, converter);
 
         assertThat(template).isNotNull();
-        assertThat(template.getMessageConverter()).isInstanceOf(Jackson2JsonMessageConverter.class);
+        assertThat(template.getMessageConverter()).isInstanceOf(ProtobufMessageConverter.class);
     }
 }
