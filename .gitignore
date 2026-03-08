@@ -19,9 +19,6 @@ target/
 .env.production
 .env.staging
 
-# Fichiers de configuration avec secrets
-application-*.properties
-application.properties
 
 # H2 database files
 *.db
