@@ -19,10 +19,11 @@ service EmailService {
 }
 
 // Email template types - Single Source of Truth for all modules
+// Note: value 1 removed — password reset emails are now handled by Keycloak.
 enum EmailTemplateType {
   EMAIL_TEMPLATE_UNSPECIFIED = 0;
-  EMAIL_TEMPLATE_PASSWORD_RESET = 1;         // Password reset request
-  EMAIL_TEMPLATE_PASSWORD_CHANGED = 2;       // Password change confirmation
+  reserved 1;                                // Was PASSWORD_RESET (now Keycloak)
+  EMAIL_TEMPLATE_PASSWORD_CHANGED = 2;       // Password change notification
   EMAIL_TEMPLATE_WELCOME = 3;                // Welcome new user
   EMAIL_TEMPLATE_EMAIL_CONFIRMATION = 4;     // Email verification
   EMAIL_TEMPLATE_PROFILE_UPDATED = 5;        // Profile change notification
