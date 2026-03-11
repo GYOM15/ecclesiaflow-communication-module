@@ -12,10 +12,6 @@ class TemplateResolverTest {
 
     @Test
     void resolveTemplateName_shouldMapAllSupportedTypes() {
-        assertThat(resolver.resolveTemplateName(EmailTemplateType.EMAIL_TEMPLATE_PASSWORD_RESET))
-                .isEqualTo("emails/password-reset");
-        assertThat(resolver.resolveTemplateName(EmailTemplateType.EMAIL_TEMPLATE_PASSWORD_CHANGED))
-                .isEqualTo("emails/password-changed");
         assertThat(resolver.resolveTemplateName(EmailTemplateType.EMAIL_TEMPLATE_WELCOME))
                 .isEqualTo("emails/welcome");
         assertThat(resolver.resolveTemplateName(EmailTemplateType.EMAIL_TEMPLATE_EMAIL_CONFIRMATION))
@@ -35,15 +31,11 @@ class TemplateResolverTest {
     @Test
     void getDefaultSubject_shouldReturnExpectedSubjects() {
         assertThat(resolver.getDefaultSubject(EmailTemplateType.EMAIL_TEMPLATE_WELCOME))
-                .contains("Welcome");
-        assertThat(resolver.getDefaultSubject(EmailTemplateType.EMAIL_TEMPLATE_PASSWORD_RESET))
-                .contains("Reset");
-        assertThat(resolver.getDefaultSubject(EmailTemplateType.EMAIL_TEMPLATE_PASSWORD_CHANGED))
-                .contains("Changed");
+                .contains("Bienvenue");
         assertThat(resolver.getDefaultSubject(EmailTemplateType.EMAIL_TEMPLATE_EMAIL_CONFIRMATION))
-                .contains("Confirm");
+                .contains("Confirmez");
         assertThat(resolver.getDefaultSubject(EmailTemplateType.EMAIL_TEMPLATE_PROFILE_UPDATED))
-                .contains("Profile");
+                .contains("profil");
     }
 
     @Test

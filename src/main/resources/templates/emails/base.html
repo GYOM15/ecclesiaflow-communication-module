@@ -59,14 +59,14 @@
             <!-- ========== SUBTITLE (optional) ========== -->
             <tr th:if="${subtitle}">
                 <td align="center" style="padding:28px 40px 0;">
-                    <span th:text="${subtitle}" style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:20px;font-weight:300;color:#64748b;">Subtitle</span>
+                    <span th:text="${subtitle}" style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:20px;font-weight:300;color:#64748b;">Sous-titre</span>
                 </td>
             </tr>
 
             <!-- ========== CONTENT ========== -->
             <tr>
                 <td style="padding:32px 40px;" th:replace="${content}">
-                    <!-- Replaced by child templates -->
+                    <!-- Remplacé par les templates enfants -->
                 </td>
             </tr>
 
@@ -81,25 +81,25 @@
                         </tr>
                         <tr>
                             <td align="center" style="padding:0 32px;">
-                                <span style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:1.5px;text-transform:uppercase;">Church Management Platform</span>
+                                <span style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:1.5px;text-transform:uppercase;">Plateforme de gestion d'&#233;glise</span>
                             </td>
                         </tr>
                         <tr>
                             <td align="center" style="padding:16px 32px 0;">
                                 <table role="presentation" cellpadding="0" cellspacing="0">
                                     <tr>
-                                        <td style="padding:0 8px;"><a href="#" style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:12px;color:rgba(255,255,255,0.4);text-decoration:none;">Help Center</a></td>
+                                        <td style="padding:0 8px;"><a href="#" style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:12px;color:rgba(255,255,255,0.4);text-decoration:none;">Centre d'aide</a></td>
                                         <td style="color:rgba(255,255,255,0.15);font-size:12px;">|</td>
-                                        <td style="padding:0 8px;"><a href="#" style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:12px;color:rgba(255,255,255,0.4);text-decoration:none;">Privacy</a></td>
+                                        <td style="padding:0 8px;"><a href="#" style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:12px;color:rgba(255,255,255,0.4);text-decoration:none;">Confidentialit&#233;</a></td>
                                         <td style="color:rgba(255,255,255,0.15);font-size:12px;">|</td>
-                                        <td style="padding:0 8px;"><a href="#" style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:12px;color:rgba(255,255,255,0.4);text-decoration:none;">Unsubscribe</a></td>
+                                        <td style="padding:0 8px;"><a href="#" style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:12px;color:rgba(255,255,255,0.4);text-decoration:none;">Se d&#233;sabonner</a></td>
                                     </tr>
                                 </table>
                             </td>
                         </tr>
                         <tr>
                             <td align="center" style="padding:16px 32px 24px;">
-                                <span style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.25);">&copy; <span th:text="${#temporals.year(#temporals.createNow())}">2026</span> EcclesiaFlow. All rights reserved.</span>
+                                <span style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.25);">&copy; <span th:text="${#temporals.year(#temporals.createNow())}">2026</span> EcclesiaFlow. Tous droits r&#233;serv&#233;s.</span>
                             </td>
                         </tr>
                     </table>
@@ -112,7 +112,7 @@
         <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
             <tr>
                 <td align="center" style="padding:16px 0;">
-                    <span style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:11px;color:#94a3b8;">This is an automated message. Please do not reply.</span>
+                    <span style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:11px;color:#94a3b8;">Ceci est un message automatique. Merci de ne pas r&#233;pondre.</span>
                 </td>
             </tr>
         </table>

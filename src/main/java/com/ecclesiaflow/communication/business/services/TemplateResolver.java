@@ -14,7 +14,6 @@ public class TemplateResolver {
     
     public String resolveTemplateName(EmailTemplateType templateType) {
         return switch (templateType) {
-            case EMAIL_TEMPLATE_PASSWORD_CHANGED -> "emails/password-changed";
             case EMAIL_TEMPLATE_WELCOME -> "emails/welcome";
             case EMAIL_TEMPLATE_EMAIL_CONFIRMATION -> "emails/confirmation";
             case EMAIL_TEMPLATE_PROFILE_UPDATED -> "emails/profile-updated";
@@ -25,10 +24,9 @@ public class TemplateResolver {
 
     public String getDefaultSubject(EmailTemplateType templateType) {
         return switch (templateType) {
-            case EMAIL_TEMPLATE_PASSWORD_CHANGED -> "Your Password Has Been Changed - EcclesiaFlow";
-            case EMAIL_TEMPLATE_WELCOME -> "Welcome to EcclesiaFlow!";
-            case EMAIL_TEMPLATE_EMAIL_CONFIRMATION -> "Confirm Your Email Address - EcclesiaFlow";
-            case EMAIL_TEMPLATE_PROFILE_UPDATED -> "Your Profile Has Been Updated - EcclesiaFlow";
+            case EMAIL_TEMPLATE_WELCOME -> "Bienvenue sur EcclesiaFlow !";
+            case EMAIL_TEMPLATE_EMAIL_CONFIRMATION -> "Confirmez votre adresse email — EcclesiaFlow";
+            case EMAIL_TEMPLATE_PROFILE_UPDATED -> "Votre profil a été mis à jour — EcclesiaFlow";
             case EMAIL_TEMPLATE_UNSPECIFIED, UNRECOGNIZED ->
                 throw new IllegalArgumentException("Invalid or unspecified template type: " + templateType);
         };

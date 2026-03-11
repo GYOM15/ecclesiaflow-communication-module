@@ -44,6 +44,11 @@ public class GrpcServerConfig {
                 .build()
                 .start();
 
+        healthStatusManager.setStatus(
+                "ecclesiaflow.email.EmailService",
+                io.grpc.health.v1.HealthCheckResponse.ServingStatus.SERVING
+        );
+
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             server.shutdown();
             try {
