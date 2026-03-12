@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(content, subtitle, accentColor)">
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(content, accentColor)">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,116 +7,95 @@
     <title th:text="${subject ?: 'EcclesiaFlow'}">EcclesiaFlow</title>
     <!--
     ============================================================================
-    EcclesiaFlow Email Template — v2 Bold & Branded
-    ============================================================================
-    Brand Colors:
-    - Sapphire:  #3B52F6 (primary)
-    - Gold:      #F59E0B / #D97706 (accent)
-    - Teal:      #14B8A6 (secondary)
-    - Error:     #EF4444
-    Typography: Inter, system fonts
+    EcclesiaFlow Email — Mix: gradient header + accent card
+    Primary: #6366F1 (indigo) | Teal: #14B8A6 | Amber: #F59E0B
+    Text: #0F172A / #64748B / #94A3B8 | Border: #E2E8F0 | Bg: #F8FAFC
     ============================================================================
     -->
     <style>
-        body { margin: 0; padding: 0; background-color: #f1f5f9; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+        body { margin: 0; padding: 0; background-color: #F8FAFC; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing: antialiased; }
         img { border: 0; display: block; }
-        a { color: #3B52F6; }
+        a { color: #6366F1; }
     </style>
 </head>
-<body style="margin:0;padding:0;background-color:#f1f5f9;">
-    <!-- Wrapper table -->
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f1f5f9;">
-    <tr><td align="center" style="padding:32px 16px;">
+<body style="margin:0;padding:0;background-color:#F8FAFC;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F8FAFC;">
+    <tr><td align="center" style="padding:40px 16px;">
+        <table width="560" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;width:100%;">
 
-        <!-- Email container (600px) -->
-        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background-color:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
-
-            <!-- ========== HEADER ========== -->
+            <!-- ========== GRADIENT HEADER ========== -->
             <tr>
-                <td style="background:linear-gradient(135deg,#0A0E1A 0%,#131B2E 100%);padding:0;">
-                    <!-- Rainbow accent strip -->
-                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <td style="height:6px;background:linear-gradient(90deg, #6366F1, #818CF8, #14B8A6, #F59E0B);border-radius:16px 16px 0 0;font-size:0;line-height:0;">&nbsp;</td>
+            </tr>
+            <tr>
+                <td style="background:#ffffff;padding:28px 24px;border-left:1px solid #E2E8F0;border-right:1px solid #E2E8F0;">
+                    <table cellpadding="0" cellspacing="0" border="0"><tr>
+                        <!-- Logo icon -->
+                        <td style="width:32px;height:32px;background:#6366F1;border-radius:8px;text-align:center;vertical-align:middle;">
+                            <span style="color:#ffffff;font-size:18px;font-weight:700;">+</span>
+                        </td>
+                        <td style="padding-left:10px;">
+                            <span style="font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-size:20px;font-weight:700;color:#0F172A;letter-spacing:-0.02em;">Ecclesia<span style="color:#6366F1;">Flow</span></span>
+                        </td>
+                    </tr></table>
+                </td>
+            </tr>
+
+            <!-- ========== CARD ========== -->
+            <tr>
+                <td>
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;border-left:1px solid #E2E8F0;border-right:1px solid #E2E8F0;">
+                        <!-- Accent strip (color varies per email type) -->
                         <tr>
-                            <td style="height:3px;background:linear-gradient(90deg,#3B52F6,#14B8A6,#F59E0B,#EF4444,#3B52F6);"></td>
+                            <td style="padding:0 24px;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+                                <td th:style="'height:3px;background:' + (${accentColor} ?: '#6366F1') + ';border-radius:3px;font-size:0;line-height:0;'" style="height:3px;background:#6366F1;border-radius:3px;font-size:0;line-height:0;">&nbsp;</td>
+                            </tr></table></td>
                         </tr>
-                    </table>
-                    <!-- Logo area -->
-                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                        <!-- Content slot -->
                         <tr>
-                            <td align="center" style="padding:28px 32px 24px;">
-                                <span style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:24px;font-weight:800;color:#ffffff;letter-spacing:-0.02em;">Ecclesia<span style="color:#6078FA;">Flow</span></span>
+                            <td style="padding:28px 24px 32px;" th:insert="${content}">
+                                <!-- Ins&#233;r&#233; par les templates enfants -->
                             </td>
                         </tr>
                     </table>
-                </td>
-            </tr>
-
-            <!-- ========== CARD ACCENT STRIP ========== -->
-            <tr>
-                <td th:style="'height:4px;background:' + (${accentColor} ?: '#3B52F6') + ';'" style="height:4px;background:#3B52F6;"></td>
-            </tr>
-
-            <!-- ========== SUBTITLE (optional) ========== -->
-            <tr th:if="${subtitle}">
-                <td align="center" style="padding:28px 40px 0;">
-                    <span th:text="${subtitle}" style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:20px;font-weight:300;color:#64748b;">Sous-titre</span>
-                </td>
-            </tr>
-
-            <!-- ========== CONTENT ========== -->
-            <tr>
-                <td style="padding:32px 40px;" th:replace="${content}">
-                    <!-- Remplacé par les templates enfants -->
                 </td>
             </tr>
 
             <!-- ========== FOOTER ========== -->
             <tr>
-                <td style="background:#0A0E1A;padding:0;">
-                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <td style="background:#ffffff;border-left:1px solid #E2E8F0;border-right:1px solid #E2E8F0;border-bottom:1px solid #E2E8F0;border-radius:0 0 16px 16px;padding:0;">
+                    <!-- Divider -->
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+                        <td style="padding:0 24px;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height:1px;background:#E2E8F0;font-size:0;line-height:0;">&nbsp;</td></tr></table></td>
+                    </tr></table>
+                    <!-- Footer content -->
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
                         <tr>
-                            <td align="center" style="padding:28px 32px 8px;">
-                                <span style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:16px;font-weight:800;color:#ffffff;letter-spacing:-0.02em;">Ecclesia<span style="color:#6078FA;">Flow</span></span>
+                            <td align="center" style="padding:20px 24px 8px;">
+                                <a href="#" style="font-family:'Inter',-apple-system,sans-serif;font-size:12px;color:#94A3B8;text-decoration:none;font-weight:500;">Centre d'aide</a>
+                                <span style="color:#E2E8F0;margin:0 8px;">&#183;</span>
+                                <a href="#" style="font-family:'Inter',-apple-system,sans-serif;font-size:12px;color:#94A3B8;text-decoration:none;font-weight:500;">Confidentialit&#233;</a>
+                                <span style="color:#E2E8F0;margin:0 8px;">&#183;</span>
+                                <a href="#" style="font-family:'Inter',-apple-system,sans-serif;font-size:12px;color:#94A3B8;text-decoration:none;font-weight:500;">Conditions</a>
                             </td>
                         </tr>
                         <tr>
-                            <td align="center" style="padding:0 32px;">
-                                <span style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:1.5px;text-transform:uppercase;">Plateforme de gestion d'&#233;glise</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="center" style="padding:16px 32px 0;">
-                                <table role="presentation" cellpadding="0" cellspacing="0">
-                                    <tr>
-                                        <td style="padding:0 8px;"><a href="#" style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:12px;color:rgba(255,255,255,0.4);text-decoration:none;">Centre d'aide</a></td>
-                                        <td style="color:rgba(255,255,255,0.15);font-size:12px;">|</td>
-                                        <td style="padding:0 8px;"><a href="#" style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:12px;color:rgba(255,255,255,0.4);text-decoration:none;">Confidentialit&#233;</a></td>
-                                        <td style="color:rgba(255,255,255,0.15);font-size:12px;">|</td>
-                                        <td style="padding:0 8px;"><a href="#" style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:12px;color:rgba(255,255,255,0.4);text-decoration:none;">Se d&#233;sabonner</a></td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="center" style="padding:16px 32px 24px;">
-                                <span style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.25);">&copy; <span th:text="${#temporals.year(#temporals.createNow())}">2026</span> EcclesiaFlow. Tous droits r&#233;serv&#233;s.</span>
+                            <td align="center" style="padding:8px 24px 20px;">
+                                <span style="font-family:'Inter',-apple-system,sans-serif;font-size:11px;color:#CBD5E1;">&copy; <span th:text="${#temporals.year(#temporals.createNow())}">2026</span> EcclesiaFlow. Tous droits r&#233;serv&#233;s.</span>
                             </td>
                         </tr>
                     </table>
                 </td>
             </tr>
 
-        </table>
-
-        <!-- Auto-message note -->
-        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+            <!-- Auto-message note -->
             <tr>
-                <td align="center" style="padding:16px 0;">
-                    <span style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:11px;color:#94a3b8;">Ceci est un message automatique. Merci de ne pas r&#233;pondre.</span>
+                <td align="center" style="padding:16px 0 0;">
+                    <span style="font-family:'Inter',-apple-system,sans-serif;font-size:11px;color:#CBD5E1;">Ceci est un message automatique. Merci de ne pas r&#233;pondre.</span>
                 </td>
             </tr>
-        </table>
 
+        </table>
     </td></tr>
     </table>
 </body>

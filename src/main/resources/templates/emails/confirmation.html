@@ -1,55 +1,66 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{emails/base :: layout(~{::content}, 'V&#233;rifiez votre email', '#3B52F6')}">
+      th:replace="~{emails/base :: layout(~{::content}, '#6366F1')}">
 <body>
     <th:block th:fragment="content">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
             <!-- Icon -->
             <tr>
-                <td align="center" style="padding-bottom:20px;">
-                    <table role="presentation" cellpadding="0" cellspacing="0">
-                        <tr>
-                            <td style="width:56px;height:56px;border-radius:50%;background:rgba(59,82,246,0.1);text-align:center;vertical-align:middle;font-size:24px;">&#10003;</td>
-                        </tr>
-                    </table>
+                <td style="padding-bottom:20px;">
+                    <table cellpadding="0" cellspacing="0" border="0"><tr>
+                        <td style="width:48px;height:48px;background:#EEF2FF;border-radius:12px;text-align:center;vertical-align:middle;">
+                            <span style="font-size:22px;">&#9993;</span>
+                        </td>
+                    </tr></table>
+                </td>
+            </tr>
+            <!-- Title -->
+            <tr>
+                <td style="font-family:'Inter',-apple-system,sans-serif;font-size:22px;font-weight:700;color:#0F172A;line-height:1.3;padding-bottom:8px;">
+                    V&#233;rifiez votre email
                 </td>
             </tr>
             <!-- Greeting -->
             <tr>
-                <td style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:15px;color:#334155;line-height:1.6;padding-bottom:16px;">
-                    Bonjour <strong th:text="${firstName ?: 'cher membre'}">Membre</strong>,
-                </td>
-            </tr>
-            <!-- Body -->
-            <tr>
-                <td style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:15px;color:#334155;line-height:1.6;padding-bottom:24px;">
-                    Bienvenue sur <strong>EcclesiaFlow</strong> ! Veuillez confirmer votre adresse email pour activer votre compte.
+                <td style="font-family:'Inter',-apple-system,sans-serif;font-size:15px;color:#64748B;line-height:1.6;padding-bottom:24px;">
+                    Bonjour <strong style="color:#0F172A;" th:text="${firstName ?: 'cher membre'}">Membre</strong>, bienvenue sur EcclesiaFlow ! Confirmez votre adresse email pour activer votre compte.
                 </td>
             </tr>
             <!-- CTA Button -->
             <tr>
                 <td align="center" style="padding-bottom:24px;">
-                    <a th:href="${confirmationLink ?: '#'}" style="display:inline-block;padding:14px 36px;background:linear-gradient(135deg,#3B52F6,#5469F7);color:#ffffff;text-decoration:none;border-radius:12px;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:14px;font-weight:600;box-shadow:0 4px 12px rgba(59,82,246,0.3);">
+                    <a th:href="${confirmationLink ?: '#'}" style="display:inline-block;padding:12px 32px;background:#6366F1;color:#ffffff;text-decoration:none;border-radius:12px;font-family:'Inter',-apple-system,sans-serif;font-size:14px;font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);">
                         V&#233;rifier mon email
                     </a>
                 </td>
             </tr>
-            <!-- Info box -->
+            <!-- Link fallback -->
             <tr>
                 <td style="padding-bottom:24px;">
-                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-                        <tr>
-                            <td style="background:#f8fafc;border-radius:8px;padding:14px 16px;border-left:3px solid #3B52F6;">
-                                <span style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:13px;color:#64748b;line-height:1.5;">Ce lien est valable <strong>24 heures</strong>. Pass&#233; ce d&#233;lai, vous devrez demander une nouvelle confirmation.</span>
-                            </td>
-                        </tr>
-                    </table>
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+                        <td style="font-family:'Inter',-apple-system,sans-serif;font-size:12px;color:#94A3B8;word-break:break-all;line-height:1.5;padding:14px 16px;background:#F8FAFC;border-radius:12px;border:1px dashed #E2E8F0;">
+                            Si le bouton ne fonctionne pas, copiez ce lien :<br/>
+                            <a th:href="${confirmationLink ?: '#'}" th:text="${confirmationLink ?: '#'}" style="color:#6366F1;text-decoration:none;">#</a>
+                        </td>
+                    </tr></table>
+                </td>
+            </tr>
+            <!-- Divider -->
+            <tr><td style="padding-bottom:20px;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="height:1px;background:#E2E8F0;font-size:0;line-height:0;">&nbsp;</td></tr></table></td></tr>
+            <!-- Info -->
+            <tr>
+                <td style="padding-bottom:12px;">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+                        <td style="background:#EEF2FF;border-radius:12px;padding:14px 16px;">
+                            <span style="font-family:'Inter',-apple-system,sans-serif;font-size:13px;color:#475569;line-height:1.5;">Ce lien est valable <strong>24 heures</strong>. Pass&#233; ce d&#233;lai, vous devrez demander une nouvelle confirmation.</span>
+                        </td>
+                    </tr></table>
                 </td>
             </tr>
             <!-- Hint -->
             <tr>
-                <td style="font-family:'Inter',Helvetica,Arial,sans-serif;font-size:13px;color:#94a3b8;line-height:1.5;padding-bottom:8px;">
-                    Si vous n'avez pas cr&#233;&#233; de compte EcclesiaFlow, vous pouvez ignorer cet email.
+                <td style="font-family:'Inter',-apple-system,sans-serif;font-size:13px;color:#94A3B8;line-height:1.5;">
+                    Si vous n'avez pas cr&#233;&#233; de compte EcclesiaFlow, ignorez cet email.
                 </td>
             </tr>
         </table>
