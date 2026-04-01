@@ -27,6 +27,9 @@ public class GrpcServerConfig {
     @Value("${grpc.server.shutdown-timeout-seconds:30}")
     private int shutdownTimeoutSeconds;
 
+    @Value("${grpc.reflection.enabled:false}")
+    private boolean reflectionEnabled;
+
     @Bean
     public HealthStatusManager healthStatusManager() {
         return new HealthStatusManager();
@@ -37,10 +40,15 @@ public class GrpcServerConfig {
             EmailGrpcServiceImpl emailGrpcService,
             HealthStatusManager healthStatusManager) throws IOException {
 
-        Server server = ServerBuilder.forPort(grpcServerPort)
+        ServerBuilder<?> serverBuilder = ServerBuilder.forPort(grpcServerPort)
                 .addService(emailGrpcService)
-                .addService(healthStatusManager.getHealthService())
-                .addService(ProtoReflectionService.newInstance())
+                .addService(healthStatusManager.getHealthService());
+
+        if (reflectionEnabled) {
+            serverBuilder.addService(ProtoReflectionService.newInstance());
+        }
+
+        Server server = serverBuilder
                 .build()
                 .start();
 

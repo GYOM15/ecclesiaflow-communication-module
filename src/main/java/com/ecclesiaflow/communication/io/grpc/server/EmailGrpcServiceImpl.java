@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * gRPC service implementation for Email.
@@ -31,12 +32,24 @@ import java.util.*;
 @ConditionalOnProperty(name = "grpc.enabled", havingValue = "true", matchIfMissing = false)
 public class EmailGrpcServiceImpl extends EmailServiceGrpc.EmailServiceImplBase {
 
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(
+            "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
+
     private final EmailService emailService;
     private final com.ecclesiaflow.communication.business.services.TemplateResolver templateResolver;
 
     @Override
     public void sendEmail(SendEmailRequest request, StreamObserver<SendEmailResponse> responseObserver) {
         try {
+            // Validate email addresses
+            String validationError = validateEmailAddresses(request);
+            if (validationError != null) {
+                responseObserver.onError(io.grpc.Status.INVALID_ARGUMENT
+                        .withDescription(validationError)
+                        .asRuntimeException());
+                return;
+            }
+
             // Convert Protobuf to Domain
             Email email = convertToDomain(request);
 
@@ -108,6 +121,12 @@ public class EmailGrpcServiceImpl extends EmailServiceGrpc.EmailServiceImplBase 
 
         for (SendEmailRequest emailRequest : request.getEmailsList()) {
             try {
+                String validationError = validateEmailAddresses(emailRequest);
+                if (validationError != null) {
+                    failed++;
+                    continue;
+                }
+
                 Email email = convertToDomain(emailRequest);
                 Email sentEmail = emailService.queueEmail(email);
                 
@@ -132,6 +151,21 @@ public class EmailGrpcServiceImpl extends EmailServiceGrpc.EmailServiceImplBase 
 
         responseObserver.onNext(response);
         responseObserver.onCompleted();
+    }
+
+    private String validateEmailAddresses(SendEmailRequest request) {
+        if (request.getToList().isEmpty()) {
+            return "At least one recipient email address is required";
+        }
+        for (String email : request.getToList()) {
+            if (!EMAIL_PATTERN.matcher(email).matches()) {
+                return "Invalid recipient email format: " + email;
+            }
+        }
+        if (request.hasFrom() && !EMAIL_PATTERN.matcher(request.getFrom()).matches()) {
+            return "Invalid sender email format: " + request.getFrom();
+        }
+        return null;
     }
 
     private Email convertToDomain(SendEmailRequest request) {

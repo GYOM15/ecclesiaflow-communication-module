@@ -2,6 +2,7 @@ package com.ecclesiaflow.communication.web.controller;
 
 import com.ecclesiaflow.communication.business.services.EmailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,13 +12,14 @@ import java.util.Map;
 
 /**
  * Test controller for debugging communication sending.
- * WARNING: Remove in production!
+ * Disabled in production via @Profile("!prod").
  *
  * @author EcclesiaFlow Team
  * @since 1.0.0
  */
 @RestController
 @RequestMapping("/test/emails")
+@Profile("!prod")
 @RequiredArgsConstructor
 public class EmailTestController {
     

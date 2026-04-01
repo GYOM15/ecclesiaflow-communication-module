@@ -50,8 +50,14 @@ public class ProtobufMessageConverter implements MessageConverter {
         }
     }
 
+    private static final String TRUSTED_PACKAGE_PREFIX = "com.ecclesiaflow.";
+
     @SuppressWarnings("unchecked")
     private Class<? extends Message> getClassFromTypeId(String typeId) {
+        if (!typeId.startsWith(TRUSTED_PACKAGE_PREFIX)) {
+            throw new MessageConversionException(
+                    "Untrusted message type: " + typeId + ". Only com.ecclesiaflow.* types are allowed.");
+        }
         try {
             return (Class<? extends Message>) Class.forName(typeId);
         } catch (ClassNotFoundException e) {
