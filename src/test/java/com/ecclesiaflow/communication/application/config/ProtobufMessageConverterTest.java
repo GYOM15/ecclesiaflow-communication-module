@@ -94,7 +94,7 @@ class ProtobufMessageConverterTest {
                 .build();
 
         MessageProperties props = new MessageProperties();
-        props.setHeader("__TypeId__", "com.nonexistent.Class");
+        props.setHeader("__TypeId__", "com.ecclesiaflow.nonexistent.Class");
         Message message = new Message(original.toByteArray(), props);
 
         Object result = converter.fromMessage(message);
